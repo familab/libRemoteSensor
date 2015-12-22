@@ -1,0 +1,26 @@
+{
+  "name": "libremotesensor",
+  "version": "1.0.0",
+  "description": "Library to communicate with Remote Sensors",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/gulp --harmony"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/familab/libRemoteSensor.git"
+  },
+  "keywords": [
+    "arduino",
+    "udp"
+  ],
+  "author": "Lance Hudson <lance@lancehudson.com> (http://lancehudson.com)",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/familab/libRemoteSensor/issues"
+  },
+  "homepage": "https://github.com/familab/libRemoteSensor#readme",
+  "dependencies": {
+    "gulp": "^3.9.0"
+  }
+}
