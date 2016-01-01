@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/familab/libRemoteSensor.git"
+    "url": "https://github.com/familab/libRemoteSensor.git"
   },
   "keywords": [
     "arduino",
@@ -21,6 +21,33 @@
   },
   "homepage": "https://github.com/familab/libRemoteSensor#readme",
   "dependencies": {
+    "debug": "^2.2.0",
     "gulp": "^3.9.0"
+  },
+  "jscsConfig": {
+    "preset": "node-style-guide",
+    "esnext": true
+  },
+  "jshintConfig": {
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "freeze": true,
+    "indent": 2,
+    "newcap": true,
+    "quotmark": "single",
+    "maxdepth": 3,
+    "maxstatements": 15,
+    "maxlen": 80,
+    "eqnull": true,
+    "funcscope": true,
+    "node": true,
+    "esnext": true,
+    "noyield": true,
+    "mocha": true
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "gulp-mocha": "^2.2.0"
   }
 }
