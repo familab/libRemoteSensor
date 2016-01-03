@@ -5,7 +5,7 @@ This Library is designed to be used inside other apps to enable communication wi
 
 Planned Methods:
 
-* autoDiscover([ip], [port], [callback]) - binds to this address and listens for sensor heartbeats
+* autoDiscover([ip], [port], [callback]) - binds to this address and listens for sensor beacons
 * defineType(type, parseFunction, sendHandler) - defines or overrides a built in type with a custom parse function or send handler.
 * setup(sensorDefinition) - creates listener and event bindings to manage a sensor. Will replace a sensor with the same name.
 * setup([sensorDefinitions]) - same as above for for entire array.

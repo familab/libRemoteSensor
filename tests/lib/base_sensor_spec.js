@@ -19,9 +19,9 @@ describe('BaseSensor', function() {
     it('should start sending beacons', function(done) {
       listener.once('message', function(msg, rinfo) {
         var msgType = msg.readUInt8(0);
-        var sensorType = msg.readUInt8(2);
-        var uptime = msg.readInt32BE(4);
-        var status = msg.readUInt8(8);
+        var sensorType = msg.readUInt8(1);
+        var uptime = msg.readInt32BE(2);
+        var status = msg.readUInt8(6);
 
         msgType.should.be.equal(constants.MESSAGE_TYPE.BEACON);
 
@@ -36,6 +36,16 @@ describe('BaseSensor', function() {
 
         done();
       });
+    });
+
+    it('should reset when sent reset command', function(done) {
+      var resetCmd = new Buffer(1);
+      resetCmd.writeUInt8(constants.MESSAGE_TYPE.RESET);
+
+      sensor.on('reset', done);
+
+      listener.send(resetCmd, 0, resetCmd.length,
+        sensor._socket.address().port, sensor._socket.address().address);
     });
 
     afterEach(function() {

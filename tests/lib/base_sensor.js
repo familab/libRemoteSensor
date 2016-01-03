@@ -16,6 +16,30 @@ var defaultOptions = {
   address: null,
   broadcastAddress: '255.255.255.255',
   broadcastPort: '6000',
+  handlers: {
+    default: function(data, rinfo) {
+      debug('Received data from %s:%d\n', rinfo.address, rinfo.port, data);
+    },
+    0x00: function beacon(data, rinfo) {
+      debug('Received beacon from %s:%d\n', rinfo.address, rinfo.port);
+    },
+    0xFF: function reset(data, rinfo) {
+      debug('Received reset command from %s:%d\n', rinfo.address, rinfo.port);
+      this.emit('reset');
+    },
+  },
+  parsers: {
+    default: function(msg) {
+      return {
+        type: msg.readUInt8(0),
+      };
+    },
+  },
+  listeners: {
+    reset: function() {
+      this.startTime = process.uptime();
+    },
+  },
 };
 
 /**
@@ -48,6 +72,13 @@ module.exports = class BaseSensor {
       debug('Sensor %s started on %s:%d', sensor.options.type,
         sensor._socket.address().address, sensor._socket.address().port);
 
+      Object.keys(sensor.options.listeners).forEach(function(event) {
+        debug('Bound %s event', event);
+        sensor.on(event, function() {
+          sensor.options.listeners[event].apply(this, arguments);
+        });
+      });
+
       sensor.startBeacon();
       if (cb) { cb(); }
     });
@@ -56,6 +87,7 @@ module.exports = class BaseSensor {
   startBeacon() {
     var sensor = this;
     sensor.emit('startBeacon');
+    sensor.startTime = process.uptime();
     sensor._beaconTimer = setInterval(function() {
       sensor.beacon.call(sensor);
     }, sensor.options.beaconInterval);
@@ -63,13 +95,13 @@ module.exports = class BaseSensor {
 
   beacon() {
     this.emit('beacon');
-    var buf = new Buffer(10);
-    buf.fill(0);
-    var uptime = process.uptime() * 1000;
-    buf.writeUInt8(MESSAGE_TYPE.BEACON);
-    buf.writeUInt8(this.options.typeCode);
-    buf.writeUInt32BE(uptime, 2);
-    buf.writeUInt8(this.status, 6);
+    var buf = new Buffer(7);
+    buf.fill(0xFF);
+    var uptime = Math.round((process.uptime() - this.startTime) * 1000);
+    buf.writeUInt8(MESSAGE_TYPE.BEACON, 0); // 1 byte
+    buf.writeUInt8(this.options.typeCode, 1); // 1 byte
+    buf.writeUInt32BE(uptime, 2); // 4 bytes
+    buf.writeUInt8(this.status, 6); // 1 bytes
     debug('Sending Beacon: %s Type: 0x%s Uptime: %d Status: 0x%s',
       buf.toString('hex'), this.options.typeCode.toString(16), uptime,
       this.status.toString(16));
@@ -93,6 +125,21 @@ module.exports = class BaseSensor {
       msg.length, rinfo.address, rinfo.port);
     debug(msg);
     this.emit('message', msg, rinfo);
+
+    // Parse with default parser
+    var data = this.options.parsers.default(msg);
+
+    // Then parse with eventType parse if exists
+    if (this.options.parsers[data.type]) {
+      data = this.options.parsers[data.type].call(this, msg);
+    }
+
+    // Then pass to hander
+    if (this.options.handlers[data.type]) {
+      this.options.handlers[data.type].call(this, data, rinfo);
+    } else {
+      this.options.handlers.default.call(this, data, rinfo);
+    }
   }
 };
 
