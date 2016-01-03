@@ -1,9 +1,11 @@
 var debug = require('debug')('BaseSensor');
 var dgram = require('dgram');
+var util = require('util');
+var EventEmitter = require('events');
+var constants = require('../../src/constants.js');
 
-var STATUS_CODES = {
-  STARTED: 0x00,
-};
+var STATUS_CODE = constants.STATUS_CODE;
+var MESSAGE_TYPE = constants.MESSAGE_TYPE;
 
 var defaultOptions = {
   beaconInterval: 60000,
@@ -28,16 +30,23 @@ module.exports = class BaseSensor {
     var sensor = this;
     var options = Object.assign({}, defaultOptions, startupOptions);
     debug('Resolved Options:', options);
+
+    EventEmitter.call(this);
+
     sensor.options = options;
-    sensor.status = STATUS_CODES.STARTED;
+
+    sensor.emit('started');
+    sensor.status = STATUS_CODE.STARTED;
 
     sensor._socket = dgram.createSocket(sensor.options.protocol,
-      sensor._onMessage);
+      function(msg, rinfo) {
+        sensor._onMessage.call(sensor, msg, rinfo);
+      });
     sensor._socket.bind(sensor.options.port, sensor.options.address,
       function() {
       sensor._socket.setBroadcast(true);
-      debug('Sensor ' + sensor.options.type + ' started on ' +
-        sensor._socket.address().address + ':' + sensor._socket.address().port);
+      debug('Sensor %s started on %s:%d', sensor.options.type,
+        sensor._socket.address().address, sensor._socket.address().port);
 
       sensor.startBeacon();
       if (cb) { cb(); }
@@ -46,15 +55,18 @@ module.exports = class BaseSensor {
 
   startBeacon() {
     var sensor = this;
+    sensor.emit('startBeacon');
     sensor._beaconTimer = setInterval(function() {
       sensor.beacon.call(sensor);
     }, sensor.options.beaconInterval);
   }
 
   beacon() {
-    var buf = new Buffer(8);
+    this.emit('beacon');
+    var buf = new Buffer(10);
     buf.fill(0);
     var uptime = process.uptime() * 1000;
+    buf.writeUInt8(MESSAGE_TYPE.BEACON);
     buf.writeUInt8(this.options.typeCode);
     buf.writeUInt32BE(uptime, 2);
     buf.writeUInt8(this.status, 6);
@@ -66,10 +78,12 @@ module.exports = class BaseSensor {
   }
 
   stopBeacon() {
+    this.emit('stopBeacon');
     clearInterval(this._beaconTimer);
   }
 
   destroy() {
+    this.emit('destroy');
     this.stopBeacon();
     this._socket.close();
   }
@@ -78,5 +92,8 @@ module.exports = class BaseSensor {
     debug('Received %d bytes from %s:%d\n',
       msg.length, rinfo.address, rinfo.port);
     debug(msg);
+    this.emit('message', msg, rinfo);
   }
 };
+
+util.inherits(module.exports, EventEmitter);
