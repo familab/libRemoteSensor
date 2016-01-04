@@ -5,6 +5,8 @@
 [![Dependency Status](https://david-dm.org/familab/libRemoteSensor.svg)](https://david-dm.org/familab/libRemoteSensor)
 [![devDependency Status](https://david-dm.org/familab/libRemoteSensor/dev-status.svg)](https://david-dm.org/familab/libRemoteSensor#info=devDependencies)
 [![Dependency Status](https://gemnasium.com/familab/libRemoteSensor.svg)](https://gemnasium.com/familab/libRemoteSensor)
+[![Test Coverage](https://codeclimate.com/github/familab/libRemoteSensor/badges/coverage.svg)](https://codeclimate.com/github/familab/libRemoteSensor/coverage)
+[![Issue Count](https://codeclimate.com/github/familab/libRemoteSensor/badges/issue_count.svg)](https://codeclimate.com/github/familab/libRemoteSensor)
 
 Library to communicate with Remote Sensors
 
