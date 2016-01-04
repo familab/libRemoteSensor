@@ -9,7 +9,7 @@ var MESSAGE_TYPE = constants.MESSAGE_TYPE;
 
 var defaultOptions = {
   type: 'NFCSensor',
-  typeCode: 0x01,
+  typeCode: 0x10,
   parsers: {
     0xD0: function animate(msg) {
       return {

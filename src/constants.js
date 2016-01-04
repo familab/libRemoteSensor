@@ -15,4 +15,8 @@ module.exports = {
 
     RESET: 0xFF,
   },
+  SENSOR_TYPES: {
+    BaseSensor: 0x00,
+    NFCSensor: 0x10,
+  },
 };
