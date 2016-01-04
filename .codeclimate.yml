@@ -1,6 +1,9 @@
 engines:
   nodesecurity:
     enabled: true
+    exclude_fingerprints:
+    - 4d8e3136f0bbcf6e60bf1d7e77df76a1 # ignore qs Denial-of-Service Memory Exhaustion and Denial-of-Service Extended Event Loop Blocking (module used only by dev tool request@2.34.0 -> codeclimate-test-reporter@0.1.1)
+    - b59396bdc6da7bbe1f704d3ba223551d # ignore uglify-js Regular Expression Denial of Service (module used only by dev tool handlebars@4.0.5 -> istanbul@0.4.1 -> gulp-istanbul@0.10.3)
   eslint:
     enabled: true
   duplication:
