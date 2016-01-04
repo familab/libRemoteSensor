@@ -1,4 +1,11 @@
 # libRemoteSensor
+
+[![Build Status](https://travis-ci.org/familab/libRemoteSensor.svg?branch=master)](https://travis-ci.org/familab/libRemoteSensor)
+[![Code Climate](https://codeclimate.com/github/familab/libRemoteSensor/badges/gpa.svg)](https://codeclimate.com/github/familab/libRemoteSensor)
+[![Dependency Status](https://david-dm.org/familab/libRemoteSensor.svg)](https://david-dm.org/familab/libRemoteSensor)
+[![devDependency Status](https://david-dm.org/familab/libRemoteSensor/dev-status.svg)](https://david-dm.org/familab/libRemoteSensor#info=devDependencies)
+[![Dependency Status](https://gemnasium.com/familab/libRemoteSensor.svg)](https://gemnasium.com/familab/libRemoteSensor)
+
 Library to communicate with Remote Sensors
 
 This Library is designed to be used inside other apps to enable communication with our standardized remote sensors. These include NFC Readers, Amp Sensors, Temperature and Humidity Sensors and Buttons. All of these sensors communicate via udp4 and speak a common network protocol.
