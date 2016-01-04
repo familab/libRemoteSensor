@@ -63,6 +63,22 @@ Example:
 D004
 ```
 
+## 0xD1 - STOP_ANIMATE
+
+Upon receiving this command the sensor should stop any animations.
+
+UDP packet sent to sensor that contains:
+
+* Message Type: hex, 1 byte
+
+Example:
+
+* Message Type: D1
+
+```
+D0
+```
+
 ## 0xFF - RESET
 
 Upon receiving this command the sensor should reboot/reset as best as its platform supports.

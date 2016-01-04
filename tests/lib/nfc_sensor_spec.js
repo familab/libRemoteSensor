@@ -105,6 +105,16 @@ describe('NFCSensor', function() {
         sensor._socket.address().port, sensor._socket.address().address);
     });
 
+    it('should stop animating when sent stop animate command', function(done) {
+      var stopAnimateCmd = new Buffer(2);
+      stopAnimateCmd.writeUInt8(constants.MESSAGE_TYPE.STOP_ANIMATE, 0);
+
+      sensor.on('stopAnimate', done);
+
+      listener.send(stopAnimateCmd, 0, stopAnimateCmd.length,
+        sensor._socket.address().port, sensor._socket.address().address);
+    });
+
     afterEach(function() {
       listener.close();
       sensor.destroy();

@@ -12,6 +12,7 @@ module.exports = {
 
     // Commands
     ANIMATE: 0xD0,
+    STOP_ANIMATE: 0xD1,
 
     RESET: 0xFF,
   },

@@ -23,6 +23,11 @@ var defaultOptions = {
       debug('Received animate command from %s:%d\n', rinfo.address, rinfo.port);
       this.emit('animate', data.animationId);
     },
+    0xD1: function stopAnimate(data, rinfo) {
+      debug('Received stop animate command from %s:%d\n',
+        rinfo.address, rinfo.port);
+      this.emit('stopAnimate');
+    },
   },
   methods: {
     cardReadISO14443A(uid) {
