@@ -11,4 +11,4 @@ addons:
       repo_token: 43ad35382852980c569b03467d267ef09b2f30585cc339edb7962de7a7403bbb
 script: npm run-script travis-ci
 after_script:
-  - codeclimate-test-reporter < coverage/lcov.info
+  - ./node_modules/.bin/codeclimate-test-reporter < coverage/lcov.info

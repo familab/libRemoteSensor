@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
+    "codeclimate-test-reporter": "^0.1.1",
     "gulp-istanbul": "^0.10.3",
     "gulp-mocha": "^2.2.0"
   }
