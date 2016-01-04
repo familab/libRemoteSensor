@@ -112,11 +112,12 @@ module.exports = class BaseSensor {
   stopBeacon() {
     this.emit('stopBeacon');
     clearInterval(this._beaconTimer);
+    this._beaconTimer = null;
   }
 
   destroy() {
     this.emit('destroy');
-    this.stopBeacon();
+    if (this._beaconTimer) { this.stopBeacon(); }
     this._socket.close();
   }
 

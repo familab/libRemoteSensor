@@ -18,7 +18,7 @@ Planned Methods:
 sensorDefinition:
 
   * name: string,
-  * ip: ipv4 address,
+  * address: ipv4 address,
   * port: int (1-65535),
   * type: string,
   * parseFunction: function (optional),

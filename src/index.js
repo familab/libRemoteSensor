@@ -2,6 +2,7 @@ var debug = require('debug')('RemoteSensor');
 var util = require('util');
 var dgram = require('dgram');
 var EventEmitter = require('events');
+var sensorTypes = require('./sensors');
 
 var constants = require('./constants.js');
 
@@ -20,6 +21,7 @@ module.exports = class RemoteSensor {
     EventEmitter.call(this);
 
     this.knownSensors = [];
+    this.sensorTypes = sensorTypes;
 
     if (this.options.autostart) {
       this.autoDiscover();
@@ -45,27 +47,50 @@ module.exports = class RemoteSensor {
   stop() {
     if (this._discoverySocket) {
       this._discoverySocket.close();
+      this._discoverySocket = null;
+    }
+    if (this._socket) {
+      this._socket.close();
+      this._socket = null;
     }
   }
   _onMessage(msg, rinfo) {
     debug('Received %d bytes from %s:%d\n',
       msg.length, rinfo.address, rinfo.port);
     debug(msg);
-    this.emit('message', msg, rinfo);
 
-    if (!this.knownSensors[rinfo.address + ':' + rinfo.port]) {
-      // New Sensor
-      var messageType = msg.readUInt8(0);
-      if (messageType === constants.MESSAGE_TYPE.BEACON) {
-        var sensorType = msg.readUInt8(2);
-        var sensorDefinition = {
-          name: 'Sensor-' + rinfo.address + ':' + rinfo.port,
-          ip: rinfo.address,
-          port: rinfo.port,
-          type: sensorType,
-        };
-        this.emit('newSensor', sensorDefinition);
+    // Parse with default parser
+    var data = this.sensorTypes.parsers.default.call(this, msg, rinfo);
+    debug('Default Parser Results: ', data);
+
+    // Then parse with eventType parse if exists
+    if (this.sensorTypes.parsers[data.msg]) {
+      data = this.sensorTypes.parsers[data.msg].call(this, data, msg);
+      debug('0x' + data.msg.toString(16) + ' Parser Results: ', data);
+    }
+
+    // Then pass to hander
+    if (this.sensorTypes.handlers[data.msg]) {
+      debug('Calling 0x%s handler', data.msg.toString(16));
+      this.sensorTypes.handlers[data.msg].call(this, data);
+    } else {
+      debug('Calling default handler');
+      this.sensorTypes.handlers.default.call(this, data);
+    }
+  }
+  run(command, sensorDefinition) {
+    debug('Running command %s on sensor', command, sensorDefinition);
+    if (this.sensorTypes[sensorDefinition.type] &&
+        this.sensorTypes[sensorDefinition.type].methods[command]) {
+      if (!this._socket) {
+        this._socket = dgram.createSocket(this.options.type);
       }
+      sensorDefinition._socket = this._socket;
+
+      var method = this.sensorTypes[sensorDefinition.type].methods[command];
+      method.call(sensorDefinition);
+    } else {
+      throw new Error('Command not found');
     }
   }
 };
