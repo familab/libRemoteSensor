@@ -14,10 +14,10 @@ UDP broadcast on port 6000 (default) that contains:
 
 Example:
 
-Beacon Message Type: 00
-BaseSensor Type: 00
-Uptime: 000003e8
-Ready Status: 00
+* Beacon Message Type: 00
+* BaseSensor Type: 00
+* Uptime: 000003e8
+* Ready Status: 00
 
 ```
 00 00 000003e8 00
@@ -35,9 +35,9 @@ UDP broadcast on port 6000 (default) that contains:
 
 Example:
 
-Message Type: A0
-UID Length: 04
-UID: FFAC32F4
+* Message Type: A0
+* UID Length: 04
+* UID: FFAC32F4
 
 ```
 A0 04 FFAC32F4
@@ -56,8 +56,8 @@ UDP packet sent to sensor that contains:
 
 Example:
 
-Message Type: D0
-Animation ID: 04
+* Message Type: D0
+* Animation ID: 04
 
 ```
 D0 04
@@ -73,7 +73,7 @@ UDP packet sent to sensor that contains:
 
 Example:
 
-Message Type: FF
+* Message Type: FF
 
 ```
 FF
