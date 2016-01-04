@@ -4,7 +4,8 @@
   "description": "Library to communicate with Remote Sensors",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/gulp --harmony"
+    "test": "./node_modules/.bin/gulp --harmony test",
+    "travis-ci": "./node_modules/.bin/gulp --harmony testCoverage"
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
+    "gulp-istanbul": "^0.10.3",
     "gulp-mocha": "^2.2.0"
   }
 }
