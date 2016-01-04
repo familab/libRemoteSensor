@@ -2,11 +2,11 @@ sudo: false
 language: node_js
 node_js:
   - "stable"
-  # - "iojs" # Not Supported 'class' yet
   - "5.0"
   - "5.1"
   - "5.2"
   - "5.3"
+# - "iojs" # Not Supported 'class' yet
   addons:
     code_climate:
         repo_token: 43ad35382852980c569b03467d267ef09b2f30585cc339edb7962de7a7403bbb
