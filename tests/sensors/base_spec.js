@@ -11,7 +11,7 @@ describe('RemoteSensor', function() {
     var server;
 
     beforeEach(function(done) {
-      sensor = new BaseSensor({beaconInterval: 1000}, done);
+      sensor = new BaseSensor({beaconInterval: 10}, done);
       server = lib({singleton: false, autostart: false});
     });
 

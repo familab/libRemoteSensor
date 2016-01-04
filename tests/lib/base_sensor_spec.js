@@ -11,7 +11,7 @@ describe('BaseSensor', function() {
     beforeEach(function(done) {
       var BaseSensor = require('./base_sensor.js');
       var dgram = require('dgram');
-      sensor = new BaseSensor({beaconInterval: 1000});
+      sensor = new BaseSensor({beaconInterval: 10});
       listener = dgram.createSocket(sensor.options.protocol);
       listener.bind(sensor.options.broadcastPort, done);
     });

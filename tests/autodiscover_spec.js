@@ -5,27 +5,28 @@ chai.should();
 describe('RemoteSensor', function() {
   describe('#autoDiscover', function() {
     var sensor;
-    var lib;
+    var server;
+    var lib = require('../');
 
     beforeEach(function(done) {
       var BaseSensor = require('./lib/base_sensor.js');
-      sensor = new BaseSensor({beaconInterval: 1000}, done);
+      sensor = new BaseSensor({beaconInterval: 500}, done);
     });
 
     it('should find the sensor', function(done) {
-      lib = require('../')({
+      server = lib({
         singleton: false, autostart: false, port: sensor.options.broadcastPort,
       });
-      lib.once('newSensor', function(sensorDefinition) {
+      server.once('newSensor', function(sensorDefinition) {
         debug('New Sensor Found', sensorDefinition);
         done();
       });
-      lib.autoDiscover();
+      server.autoDiscover();
     });
 
     afterEach(function() {
       sensor.destroy();
-      if (lib) {lib.stop();}
+      if (server) {server.stop();}
     });
   });
 });

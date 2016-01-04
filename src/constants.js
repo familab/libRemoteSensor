@@ -7,7 +7,12 @@ module.exports = {
     // Status
     BEACON: 0x00,
 
+    // Events
+    ISO14443A_CARD_READ: 0xA0,
+
     // Commands
+    ANIMATE: 0xD0,
+
     RESET: 0xFF,
   },
 };

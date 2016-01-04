@@ -53,6 +53,14 @@ module.exports = class BaseSensor {
   constructor(startupOptions, cb) {
     var sensor = this;
     var options = Object.assign({}, defaultOptions, startupOptions);
+    Object.assign(options.handlers || {}, defaultOptions.handlers || {},
+      startupOptions.handlers);
+    Object.assign(options.parsers || {}, defaultOptions.parsers || {},
+      startupOptions.parsers);
+    Object.assign(options.listeners || {}, defaultOptions.listeners || {},
+      startupOptions.listeners);
+    Object.assign(options.methods || {}, defaultOptions.methods || {},
+      startupOptions.methods);
     debug('Resolved Options:', options);
 
     EventEmitter.call(this);
@@ -96,7 +104,6 @@ module.exports = class BaseSensor {
   beacon() {
     this.emit('beacon');
     var buf = new Buffer(7);
-    buf.fill(0xFF);
     var uptime = Math.round((process.uptime() - this.startTime) * 1000);
     buf.writeUInt8(MESSAGE_TYPE.BEACON, 0); // 1 byte
     buf.writeUInt8(this.options.typeCode, 1); // 1 byte
@@ -140,6 +147,15 @@ module.exports = class BaseSensor {
       this.options.handlers[data.type].call(this, data, rinfo);
     } else {
       this.options.handlers.default.call(this, data, rinfo);
+    }
+  }
+
+  run(command, data) {
+    debug('Running command %s', command);
+    if (this.options.methods[command]) {
+      this.options.methods[command].call(this, data);
+    } else {
+      throw new Error('Command not found');
     }
   }
 };
