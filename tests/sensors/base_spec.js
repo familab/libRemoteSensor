@@ -11,7 +11,7 @@ describe('RemoteSensor', function() {
     var server;
 
     beforeEach(function(done) {
-      sensor = new BaseSensor({beaconInterval: 10}, done);
+      sensor = new BaseSensor({beaconInterval: 1000}, done);
       server = lib({singleton: false, autostart: false});
     });
 
@@ -20,7 +20,7 @@ describe('RemoteSensor', function() {
         data.port.should.equal(sensor._socket.address().port);
         done();
       });
-      server.autoDiscover();
+      server.listen();
     });
 
     it('should reset', function(done) {

@@ -11,7 +11,7 @@ describe('RemoteSensor', function() {
     var server;
 
     beforeEach(function(done) {
-      sensor = new NFCSensor({beaconInterval: 10}, done);
+      sensor = new NFCSensor({beaconInterval: 1000}, done);
       server = lib({singleton: false, autostart: false});
     });
 
@@ -20,7 +20,7 @@ describe('RemoteSensor', function() {
         data.port.should.equal(sensor._socket.address().port);
         done();
       });
-      server.autoDiscover();
+      server.listen();
     });
 
     it('should reset', function(done) {
@@ -32,6 +32,32 @@ describe('RemoteSensor', function() {
 
       sensor.once('reset', done);
       server.run('reset', sensorDefinition);
+    });
+
+    it('should send a 4 byte card read', function(done) {
+      var uid = (0xFFAC32F4).toString(16);
+
+      server.once('cardReadISO14443A', function(data) {
+        data.should.equal(uid);
+        done();
+      });
+
+      server.listen(function() {
+        sensor.run('cardReadISO14443A', uid);
+      });
+    });
+
+    it('should send a 7 byte card read', function(done) {
+      var uid = (0xFFACDE34AC32F4).toString(16);
+
+      server.once('cardReadISO14443A', function(data) {
+        data.should.equal(uid);
+        done();
+      });
+
+      server.listen(function() {
+        sensor.run('cardReadISO14443A', uid);
+      });
     });
 
     it('should animate', function(done) {

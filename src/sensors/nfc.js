@@ -1,3 +1,4 @@
+var debug = require('debug')('RemoteSensor:Sensors:NFC');
 var constants = require('../constants.js');
 
 module.exports = {
@@ -5,8 +6,9 @@ module.exports = {
   typeCode: constants.SENSOR_TYPES.NFCSensor,
   parsers: {
     0xA0: function cardReadISO14443A(data, msg) {
+      debug('Received card read', msg);
       var length = Math.min(7, msg.readUInt8(1));
-      var uid = msg.toString('hex', 2, length);
+      var uid = msg.toString('hex', 2, length + 2);
       return Object.assign(data, {
         uidLength: length,
         uid: uid,
@@ -15,7 +17,7 @@ module.exports = {
   },
   handlers: {
     0xA0: function(data) {
-      this.emit('cardReadISO14443A', data);
+      this.emit('cardReadISO14443A', data.uid);
     },
   },
   methods: {

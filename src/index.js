@@ -9,7 +9,7 @@ var constants = require('./constants.js');
 var defaultOptions = {
   autostart: true,
   ip: null,
-  discoveryPort: 6000,
+  port: 6000,
   type: 'udp4',
 };
 
@@ -24,30 +24,41 @@ module.exports = class RemoteSensor {
     this.sensorTypes = sensorTypes;
 
     if (this.options.autostart) {
-      this.autoDiscover();
+      this.listen();
     }
   }
-  autoDiscover(ip, port, cb) {
+  createSocket() {
     var server = this;
-    debug('autoDiscover', ip, port);
-
-    server._discoverySocket = dgram.createSocket(server.options.type,
+    server._socket = dgram.createSocket(server.options.type,
       function(msg, rinfo) {
         server._onMessage.call(server, msg, rinfo);
       });
-    server._discoverySocket.bind(port || server.options.discoveryPort,
+  }
+  listen(ip, port, cb) {
+    var server = this;
+
+    if (typeof ip === 'function') {
+      cb = ip;
+      ip = null;
+    }
+
+    debug('listen', ip, port);
+
+    if (!server._socket) { this.createSocket(); }
+
+    server._socket.bind(port || server.options.port,
         ip || server.options.ip,
       function() {
-      debug('Discovery Server started on %s:%d',
-        server._discoverySocket.address().address,
-        server._discoverySocket.address().port);
+      debug('Server started on %s:%d',
+        server._socket.address().address,
+        server._socket.address().port);
       if (cb) { cb(); }
     });
   }
   stop() {
-    if (this._discoverySocket) {
-      this._discoverySocket.close();
-      this._discoverySocket = null;
+    if (this._socket) {
+      this._socket.close();
+      this._socket = null;
     }
     if (this._socket) {
       this._socket.close();
@@ -85,7 +96,7 @@ module.exports = class RemoteSensor {
     debug('Running command %s on sensor', command, sensorDefinition);
     if (this.sensorTypes.methods[command]) {
       if (!this._socket) {
-        this._socket = dgram.createSocket(this.options.type);
+        this.createSocket();
       }
       sensorDefinition._socket = this._socket;
 

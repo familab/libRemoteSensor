@@ -1,3 +1,4 @@
+var debug = require('debug')('RemoteSensor:Sensors:Base');
 var constants = require('../constants.js');
 
 module.exports = {

@@ -3,7 +3,7 @@ var chai = require('chai');
 chai.should();
 
 describe('RemoteSensor', function() {
-  describe('#autoDiscover', function() {
+  describe('#listen', function() {
     var sensor;
     var server;
     var lib = require('../');
@@ -21,7 +21,7 @@ describe('RemoteSensor', function() {
         debug('New Sensor Found', sensorDefinition);
         done();
       });
-      server.autoDiscover();
+      server.listen();
     });
 
     afterEach(function() {
