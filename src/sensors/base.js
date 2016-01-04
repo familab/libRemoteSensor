@@ -36,6 +36,7 @@ module.exports = {
     },
     0x00: function beacon(data) {
       if (data.new) {
+        this.knownSensors[data.address + ':' + data.port] = data;
         this.emit('newSensor', data);
         this.emit('beacon', data);
       } else {

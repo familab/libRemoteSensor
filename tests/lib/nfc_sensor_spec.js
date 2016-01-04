@@ -42,7 +42,7 @@ describe('NFCSensor', function() {
       var resetCmd = new Buffer(1);
       resetCmd.writeUInt8(constants.MESSAGE_TYPE.RESET);
 
-      sensor.on('reset', done);
+      sensor.once('reset', done);
 
       listener.send(resetCmd, 0, resetCmd.length,
         sensor._socket.address().port, sensor._socket.address().address);
@@ -96,7 +96,7 @@ describe('NFCSensor', function() {
       animateCmd.writeUInt8(constants.MESSAGE_TYPE.ANIMATE, 0);
       animateCmd.writeUInt8(animationId, 1);
 
-      sensor.on('animate', function(data) {
+      sensor.once('animate', function(data) {
         data.should.be.equal(animationId);
         done();
       });
@@ -109,7 +109,7 @@ describe('NFCSensor', function() {
       var stopAnimateCmd = new Buffer(2);
       stopAnimateCmd.writeUInt8(constants.MESSAGE_TYPE.STOP_ANIMATE, 0);
 
-      sensor.on('stopAnimate', done);
+      sensor.once('stopAnimate', done);
 
       listener.send(stopAnimateCmd, 0, stopAnimateCmd.length,
         sensor._socket.address().port, sensor._socket.address().address);

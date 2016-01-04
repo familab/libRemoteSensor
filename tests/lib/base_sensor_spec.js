@@ -42,7 +42,7 @@ describe('BaseSensor', function() {
       var resetCmd = new Buffer(1);
       resetCmd.writeUInt8(constants.MESSAGE_TYPE.RESET);
 
-      sensor.on('reset', done);
+      sensor.once('reset', done);
 
       listener.send(resetCmd, 0, resetCmd.length,
         sensor._socket.address().port, sensor._socket.address().address);

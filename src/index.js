@@ -52,14 +52,10 @@ module.exports = class RemoteSensor {
       debug('Server started on %s:%d',
         server._socket.address().address,
         server._socket.address().port);
-      if (cb) { cb(); }
+      if (cb) { return cb(); }
     });
   }
   stop() {
-    if (this._socket) {
-      this._socket.close();
-      this._socket = null;
-    }
     if (this._socket) {
       this._socket.close();
       this._socket = null;

@@ -14,6 +14,8 @@ module.exports = {
     ANIMATE: 0xD0,
     STOP_ANIMATE: 0xD1,
 
+    // Special
+    UNKNOWN: 0xFE,
     RESET: 0xFF,
   },
   SENSOR_TYPES: {
