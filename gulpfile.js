@@ -12,7 +12,7 @@ gulp.task('test', function() {
 });
 
 gulp.task('pre-test', function() {
-  return gulp.src(['src/**/*.js'])
+  return gulp.src(['index.js', 'src/**/*.js'])
     // Covering files
     .pipe(istanbul())
     // Force `require` to return covered files
