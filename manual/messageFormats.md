@@ -20,7 +20,7 @@ Example:
 * Ready Status: 00
 
 ```
-00 00 000003e8 00
+0000000003e800
 ```
 
 # Events
@@ -40,7 +40,7 @@ Example:
 * UID: FFAC32F4
 
 ```
-A0 04 FFAC32F4
+A004FFAC32F4
 ```
 
 # Commands
@@ -60,7 +60,7 @@ Example:
 * Animation ID: 04
 
 ```
-D0 04
+D004
 ```
 
 ## 0xFF - RESET
