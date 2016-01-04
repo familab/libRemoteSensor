@@ -2,7 +2,7 @@ sudo: false
 language: node_js
 node_js:
   - "stable"
-#  - "iojs" # Not Supported 'class' yet
+  # - "iojs" # Not Supported 'class' yet
   - "5.0"
   - "5.1"
   - "5.2"
