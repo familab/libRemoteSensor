@@ -9,28 +9,22 @@ var sensorTypes = {
   methods: {},
 };
 
+var copyIfDoesntExist = function(obj, destination) {
+  Object.keys(obj).forEach(function(type) {
+    if (!destination[type]) {
+      destination[type] = obj[type];
+    }
+  });
+};
+
 sensorLoadOrder.forEach(function(sensor) {
   var sensorDefinition = require('./' + sensor + '.js');
 
   sensorTypes[sensorDefinition.typeCode] = sensorDefinition;
-  Object.keys(sensorDefinition.parsers).forEach(function(parserType) {
-    if (!sensorTypes.parsers[parserType]) {
-      sensorTypes.parsers[parserType] =
-        sensorDefinition.parsers[parserType];
-    }
-  });
-  Object.keys(sensorDefinition.handlers).forEach(function(handlerType) {
-    if (!sensorTypes.handlers[handlerType]) {
-      sensorTypes.handlers[handlerType] =
-        sensorDefinition.handlers[handlerType];
-    }
-  });
-  Object.keys(sensorDefinition.methods).forEach(function(methodType) {
-    if (!sensorTypes.methods[methodType]) {
-      sensorTypes.methods[methodType] =
-        sensorDefinition.methods[methodType];
-    }
-  });
+
+  copyIfDoesntExist(sensorDefinition.parsers, sensorTypes.parsers);
+  copyIfDoesntExist(sensorDefinition.handlers, sensorTypes.handlers);
+  copyIfDoesntExist(sensorDefinition.methods, sensorTypes.methods);
 });
 
 module.exports = sensorTypes;
