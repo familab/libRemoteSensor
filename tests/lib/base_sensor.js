@@ -6,12 +6,13 @@ var constants = require('../../src/constants.js');
 
 var STATUS_CODE = constants.STATUS_CODE;
 var MESSAGE_TYPE = constants.MESSAGE_TYPE;
+var SENSOR_TYPES = constants.SENSOR_TYPES;
 
 var defaultOptions = {
   beaconInterval: 60000,
   protocol: 'udp4',
   type: 'BaseSensor',
-  typeCode: 0x00,
+  typeCode: SENSOR_TYPES.BaseSensor,
   port: null,
   address: null,
   broadcastAddress: '255.255.255.255',

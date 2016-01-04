@@ -1,10 +1,12 @@
 var sensorLoadOrder = [
   'base',
+  'nfc',
 ];
 
 var sensorTypes = {
   parsers: {},
   handlers: {},
+  methods: {},
 };
 
 sensorLoadOrder.forEach(function(sensor) {
@@ -21,6 +23,12 @@ sensorLoadOrder.forEach(function(sensor) {
     if (!sensorTypes.handlers[handlerType]) {
       sensorTypes.handlers[handlerType] =
         sensorDefinition.handlers[handlerType];
+    }
+  });
+  Object.keys(sensorDefinition.methods).forEach(function(methodType) {
+    if (!sensorTypes.methods[methodType]) {
+      sensorTypes.methods[methodType] =
+        sensorDefinition.methods[methodType];
     }
   });
 });

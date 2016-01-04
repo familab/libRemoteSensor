@@ -59,6 +59,7 @@ module.exports = class RemoteSensor {
       msg.length, rinfo.address, rinfo.port);
     debug(msg);
 
+    // TODO support custom parsers for each sensor with inheritance
     // Parse with default parser
     var data = this.sensorTypes.parsers.default.call(this, msg, rinfo);
     debug('Default Parser Results: ', data);
@@ -69,6 +70,7 @@ module.exports = class RemoteSensor {
       debug('0x' + data.msg.toString(16) + ' Parser Results: ', data);
     }
 
+    // TODO support custom handlers for each sensor with inheritance
     // Then pass to hander
     if (this.sensorTypes.handlers[data.msg]) {
       debug('Calling 0x%s handler', data.msg.toString(16));
@@ -78,17 +80,16 @@ module.exports = class RemoteSensor {
       this.sensorTypes.handlers.default.call(this, data);
     }
   }
-  run(command, sensorDefinition) {
+  run(command, sensorDefinition, args) {
+    // TODO support custom methods for each sensor with inheritance
     debug('Running command %s on sensor', command, sensorDefinition);
-    if (this.sensorTypes[sensorDefinition.type] &&
-        this.sensorTypes[sensorDefinition.type].methods[command]) {
+    if (this.sensorTypes.methods[command]) {
       if (!this._socket) {
         this._socket = dgram.createSocket(this.options.type);
       }
       sensorDefinition._socket = this._socket;
 
-      var method = this.sensorTypes[sensorDefinition.type].methods[command];
-      method.call(sensorDefinition);
+      this.sensorTypes.methods[command].apply(sensorDefinition, args);
     } else {
       throw new Error('Command not found');
     }

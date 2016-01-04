@@ -96,8 +96,8 @@ describe('NFCSensor', function() {
       animateCmd.writeUInt8(constants.MESSAGE_TYPE.ANIMATE, 0);
       animateCmd.writeUInt8(animationId, 1);
 
-      sensor.on('animate', function(animationId) {
-        animationId.should.be.equal(animationId);
+      sensor.on('animate', function(data) {
+        data.should.be.equal(animationId);
         done();
       });
 

@@ -6,10 +6,11 @@ var constants = require('../../src/constants.js');
 
 var STATUS_CODE = constants.STATUS_CODE;
 var MESSAGE_TYPE = constants.MESSAGE_TYPE;
+var SENSOR_TYPES = constants.SENSOR_TYPES;
 
 var defaultOptions = {
   type: 'NFCSensor',
-  typeCode: 0x10,
+  typeCode: SENSOR_TYPES.NFCSensor,
   parsers: {
     0xD0: function animate(msg) {
       return {
@@ -67,6 +68,6 @@ var NFCSensor = module.exports = class NFCSensor extends BaseSensor {
     Object.assign(options.methods || {}, defaultOptions.methods || {},
       startupOptions.methods);
 
-    super(options);
+    super(options, cb);
   }
 };

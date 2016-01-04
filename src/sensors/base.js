@@ -2,7 +2,7 @@ var constants = require('../constants.js');
 
 module.exports = {
   type: 'BaseSensor',
-  typeCode: 0x00,
+  typeCode: constants.SENSOR_TYPES.BaseSensor,
   parsers: {
     default: function(msg, rinfo) {
       var data = {
